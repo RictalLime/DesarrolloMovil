@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragmentos.PerfilFragment"
+    android:background="#FCFFDF"
+    >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Perfil"
+        android:fontFamily="@font/display"
+        android:layout_gravity="top|center_horizontal"
+        android:layout_marginTop="20dp"
+        android:textSize="40sp"
+        android:textColor="#021D3D"
+        android:textStyle="bold"/>
+
+    <ImageView
+        android:id="@+id/icono"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="80dp"
+        android:src="@drawable/person_24px" />
+
+    <TextView
+        android:id="@+id/nombre_user"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Perfil"
+        android:fontFamily="@font/display"
+        android:layout_gravity="top|center_horizontal"
+        android:layout_marginTop="250dp"
+        android:textSize="40sp"
+        android:textColor="#021D3D"
+        android:textStyle="bold"/>
+
+
+    <Button
+        android:id="@+id/btn_editarP"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="320dp"
+        android:fontFamily="@font/roboto"
+        android:text="Editar Perfil"
+        android:textColor="#021D3D"
+        android:textSize="20sp" />
+
+    <Button
+        android:id="@+id/btn_Buscar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="400dp"
+        android:fontFamily="@font/roboto"
+        android:text="Buscar usuario"
+        android:textColor="#021D3D"
+        android:textSize="20sp" />
+
+    <Button
+        android:id="@+id/btn_eliminarP"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="500dp"
+        android:fontFamily="@font/roboto"
+        android:text="Eliminar Perfil"
+        android:textColor="#FF1100"
+        android:textSize="20sp" />
+
+    <Button
+        android:id="@+id/btn_cerrar_sesion"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="600dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/button"
+        android:fontFamily="@font/roboto"
+        android:text="Cerrar sesión"
+        android:textColor="#021D3D"
+        android:textSize="20sp" />
+
+</FrameLayout>
