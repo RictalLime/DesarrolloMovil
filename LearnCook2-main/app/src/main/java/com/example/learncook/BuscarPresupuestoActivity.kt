@@ -12,6 +12,7 @@ import com.example.learncook.databinding.ActivityBuscarPresupuestoBinding
 import com.example.learncook.interfaces.ListenerRecycleReceta
 import com.example.learncook.modelo.LearnCookDB
 import com.example.learncook.poko.RecetaDatos
+import com.example.learncook.utilidades.ToastHelper
 
 class BuscarPresupuestoActivity : AppCompatActivity(), ListenerRecycleReceta {
     private lateinit var binding: ActivityBuscarPresupuestoBinding
@@ -28,6 +29,7 @@ class BuscarPresupuestoActivity : AppCompatActivity(), ListenerRecycleReceta {
         idUsuario = intent.getIntExtra("idUsuario",-1)
 
         binding.Buscar.setOnClickListener {
+            ToastHelper.vibrate(this)
             var presupuestoMinimo = binding.edtPresupuestoMinimo.text.toString()
             var presupuestoMaximo = binding.edtPresupuestoMaximo.text.toString()
             if(validardatos(presupuestoMinimo,presupuestoMaximo)){
@@ -70,10 +72,12 @@ class BuscarPresupuestoActivity : AppCompatActivity(), ListenerRecycleReceta {
         var bandera =false
         if(presupuestoMinimo.isEmpty()){
             binding.edtPresupuestoMinimo.error = "llena este campo"
+            ToastHelper.vibrate(this)
             return bandera
         }
         if(presupuestoMaximo.isEmpty()){
             binding.edtPresupuestoMaximo.error = "llena este campo"
+            ToastHelper.vibrate(this)
             return bandera
         }
 
@@ -83,21 +87,21 @@ class BuscarPresupuestoActivity : AppCompatActivity(), ListenerRecycleReceta {
         try {
             minimo = presupuestoMinimo.toDouble()
         } catch (e: NumberFormatException) {
-            Toast.makeText(this, "El presupuesto minimo no es un numero", Toast.LENGTH_SHORT).show()
+            ToastHelper.showError(this, "El presupuesto mínimo no es un número válido")
             return bandera
         }
         try {
             maximo = presupuestoMaximo.toDouble()
         } catch (e: NumberFormatException) {
-            Toast.makeText(this, "El presupuesto maximo no es un numero", Toast.LENGTH_SHORT).show()
+            ToastHelper.showError(this, "El presupuesto máximo no es un número válido")
             return bandera
         }
         if (!(minimo>0) || !(maximo>0)){
-            Toast.makeText(this, "No puedes poner numeros negativos o menor a 1", Toast.LENGTH_SHORT).show()
+            ToastHelper.showWarning(this, "No puedes poner números negativos o menores a 1")
             return bandera
         }
         if(!(maximo>=minimo)){
-            Toast.makeText(this, "El presupuesto maximo no debe ser menor o igual al minimo", Toast.LENGTH_SHORT).show()
+            ToastHelper.showWarning(this, "El presupuesto máximo debe ser mayor o igual al mínimo")
             return bandera
         }
         bandera = true
@@ -106,14 +110,17 @@ class BuscarPresupuestoActivity : AppCompatActivity(), ListenerRecycleReceta {
     }
 
     override fun clicEditarReceta(receta: RecetaDatos, position: Int) {
-        Toast.makeText(this, "No puedes hacer esto con esta receta", Toast.LENGTH_SHORT).show()
+        ToastHelper.vibrate(this)
+        ToastHelper.showInfo(this, "No puedes hacer esto con esta receta")
     }
 
     override fun clicEliminarReceta(receta: RecetaDatos, position: Int) {
-        Toast.makeText(this, "No puedes hacer esto con esta receta", Toast.LENGTH_SHORT).show()
+        ToastHelper.vibrate(this)
+        ToastHelper.showInfo(this, "No puedes hacer esto con esta receta")
     }
 
     override fun clicCalificarReceta(receta: RecetaDatos, position: Int) {
+        ToastHelper.vibrate(this)
         val intent = Intent(this@BuscarPresupuestoActivity, CalificarRecetaActivity::class.java)
         intent.putExtra("idUsuario",idUsuario)
         intent.putExtra("idReceta",receta.idReceta)
@@ -122,6 +129,7 @@ class BuscarPresupuestoActivity : AppCompatActivity(), ListenerRecycleReceta {
     }
 
     override fun clicCompartirReceta(receta: RecetaDatos, position: Int) {
+        ToastHelper.vibrate(this)
         val mensaje = "Receta: ${receta.nombreReceta}\n" +
                 "Elaborada por: ${receta.nombreUsuario}\n" +
                 "Ingredientes: ${receta.ingredientes.toString()}\n" +
@@ -133,6 +141,7 @@ class BuscarPresupuestoActivity : AppCompatActivity(), ListenerRecycleReceta {
         intent.type = "text/plain"
         intent.putExtra(Intent.EXTRA_TEXT, mensaje)
         startActivity(Intent.createChooser(intent, "Compartir Receta!"))
+        ToastHelper.showSuccess(this, "Receta compartida")
     }
 
 

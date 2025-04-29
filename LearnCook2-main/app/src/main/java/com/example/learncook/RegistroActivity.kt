@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.learncook.databinding.ActivityRegistroBinding
 import com.example.learncook.modelo.LearnCookDB
 import com.example.learncook.poko.Usuario
+import com.example.learncook.utilidades.ToastHelper
 
 class RegistroActivity : AppCompatActivity() {
     private lateinit var bingind: ActivityRegistroBinding
@@ -19,6 +20,7 @@ class RegistroActivity : AppCompatActivity() {
         modelo = LearnCookDB(this@RegistroActivity)
 
         bingind.btnRegistrarse.setOnClickListener {
+            ToastHelper.vibrate(this)
             var correo = bingind.etCorreo.text.toString()
             var contrasena = bingind.etContrasena.text.toString()
             var nombreUsuario = bingind.etNombreUsuario.text.toString()
@@ -26,10 +28,10 @@ class RegistroActivity : AppCompatActivity() {
                 var usuario = Usuario(0,correo,contrasena,nombreUsuario)
                 var registrado = modelo.agregarUsuario(usuario)
                 if (registrado>0){
-                    Toast.makeText(this@RegistroActivity, "Usuario registrado Correctamente", Toast.LENGTH_SHORT).show()
+                    ToastHelper.showSuccess(this, "Registro exitoso")
                     finish()
                 }else{
-                    Toast.makeText(this@RegistroActivity, "No se pudo regitrar el Usuario", Toast.LENGTH_SHORT).show()
+                    ToastHelper.showError(this, "Error en el registro")
                 }
             }
         }
@@ -39,7 +41,7 @@ class RegistroActivity : AppCompatActivity() {
     private fun validardatos(correo: String, contrasena: String, nombreUsuario: String): Boolean {
         var bandera = true
         if (correo.isEmpty() || contrasena.isEmpty() || nombreUsuario.isEmpty()) {
-            Toast.makeText(this@RegistroActivity, "Por favor llena todos los campos", Toast.LENGTH_SHORT).show()
+            ToastHelper.showWarning(this, "Complete todos los campos")
             bandera = false
         } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(correo).matches()) {
             Toast.makeText(this@RegistroActivity, "Correo no válido", Toast.LENGTH_SHORT).show()

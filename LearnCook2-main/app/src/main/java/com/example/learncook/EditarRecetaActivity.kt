@@ -15,6 +15,7 @@ import com.example.learncook.interfaces.ListenerRecycleIngrediente
 import com.example.learncook.modelo.LearnCookDB
 import com.example.learncook.poko.Ingrediente
 import com.example.learncook.poko.Receta
+import com.example.learncook.utilidades.ToastHelper
 
 class EditarRecetaActivity : AppCompatActivity(), ListenerRecycleIngrediente {
     private lateinit var binding: ActivityEditarRecetaBinding
@@ -71,15 +72,16 @@ class EditarRecetaActivity : AppCompatActivity(), ListenerRecycleIngrediente {
         }
 
         binding.btnEditarReceta.setOnClickListener {
+            ToastHelper.vibrate(this)
             if (validarDatos()) {
                 var receta2 = receta?.let { it1 -> Receta(it1.id,receta.idUsuario,binding.etNombreReceta.text.toString(),binding.etTiempoReceta.text.toString(),presupuesto,binding.etPreparacion.text.toString()) }
 
                 val numero = modelo.modificarReceta(receta2!!)
                 if (numero > 0) {
-                    Toast.makeText(this, "Receta editada", Toast.LENGTH_SHORT).show()
+                    ToastHelper.showSuccess(this, "Receta editada exitosamente")
                     finish()
                 } else {
-                    Toast.makeText(this, "Error al editar receta", Toast.LENGTH_SHORT).show()
+                    ToastHelper.showError(this, "Error al editar receta")
                 }
             }
         }
@@ -109,18 +111,19 @@ class EditarRecetaActivity : AppCompatActivity(), ListenerRecycleIngrediente {
                 Toast.makeText(this@EditarRecetaActivity, "Debes tener al menos un ingrediente", Toast.LENGTH_SHORT).show()
             }
         }else{
-            Toast.makeText(this, "favor de llenar todos los datos", Toast.LENGTH_SHORT).show()
+            ToastHelper.showWarning(this, "favor de llenar todos los datos")
         }
         return bandera
     }
 
     override fun clicEliminarIngrediente(ingrediente: Ingrediente, position: Int) {
+        ToastHelper.vibrate(this)
         if (modelo.eliminarIngrediente(ingrediente.id)>0){
             actualizarPresupuesto()
             actualizarPantalla()
-            Toast.makeText(this, "Ingrediente eliminado", Toast.LENGTH_SHORT).show()
+            ToastHelper.showSuccess(this, "Ingrediente eliminado")
         }else{
-            Toast.makeText(this, "No se pudo eliminar el Ingrediente", Toast.LENGTH_SHORT).show()
+            ToastHelper.showError(this, "No se pudo eliminar el Ingrediente")
         }
 
     }
@@ -131,10 +134,10 @@ class EditarRecetaActivity : AppCompatActivity(), ListenerRecycleIngrediente {
             ingrediente.cantidad = etCantidad.text.toString().toDouble()
             if(modelo.editarIngrediente(ingrediente)>0){
                 actualizarPantalla()
-                Toast.makeText(this, "Ingrediente editado", Toast.LENGTH_SHORT).show()
+                ToastHelper.showSuccess(this, "Ingrediente actualizado")
             }
         }else{
-            Toast.makeText(this, "no puedes agregar un ingrediente sin un dato o menor a 0", Toast.LENGTH_SHORT).show()
+            ToastHelper.showWarning(this, "no puedes agregar un ingrediente sin un dato o menor a 0")
         }
     }
 
@@ -168,15 +171,15 @@ class EditarRecetaActivity : AppCompatActivity(), ListenerRecycleIngrediente {
                 var agregado = modelo.agregarIngrediente(idReceta, ingrediente)
                 if (agregado>0){
                     actualizarPresupuesto()
-                    Toast.makeText(this@EditarRecetaActivity, "Ingrediente Agregado", Toast.LENGTH_SHORT).show()
+                    ToastHelper.showSuccess(this, "Ingrediente agregado")
                     actualizarPantalla()
                 }else{
-                    Toast.makeText(this@EditarRecetaActivity, "Error al agregar Ingrediente", Toast.LENGTH_SHORT).show()
+                    ToastHelper.showError(this, "Error al agregar ingrediente")
                 }
 
                 binding.spIngredientesEditados.setSelection(0)
             } else {
-                Toast.makeText(this, "Cantidad inválida", Toast.LENGTH_SHORT).show()
+                ToastHelper.showWarning(this, "Cantidad inválida")
             }
         }
         builder.setNegativeButton("Cancelar") { dialog, which -> dialog.cancel() }

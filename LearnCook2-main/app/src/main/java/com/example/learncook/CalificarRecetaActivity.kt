@@ -9,6 +9,7 @@ import com.example.learncook.adaptadores.CalificacionAdapter
 import com.example.learncook.databinding.ActivityCalificarRecetaBinding
 import com.example.learncook.modelo.LearnCookDB
 import com.example.learncook.poko.Calificacion
+import com.example.learncook.utilidades.ToastHelper
 
 class CalificarRecetaActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCalificarRecetaBinding
@@ -31,6 +32,7 @@ class CalificarRecetaActivity : AppCompatActivity() {
         mostarcalificaciones()
         configuracionRecycle()
         binding.btnCalificar.setOnClickListener {
+            ToastHelper.vibrate(this)
             if (validardatos()){
                 insertarCalificacion()
             }
@@ -98,20 +100,21 @@ class CalificarRecetaActivity : AppCompatActivity() {
         var cometario = binding.tiComentario.text.toString()
         var calificacion = Calificacion(0,idUsuario,idReceta,puntuacion,cometario)
         if(modelo.agregarCalificacion(calificacion)>0){
-            Toast.makeText(this@CalificarRecetaActivity, "Calificacion agregada correctamente", Toast.LENGTH_SHORT).show()
+            ToastHelper.showSuccess(this, "Calificación agregada correctamente")
             mostarcalificaciones()
         }else{
-            Toast.makeText(this@CalificarRecetaActivity, "Tu ya calificaste esta receta", Toast.LENGTH_SHORT).show()
+            ToastHelper.showError(this, "Ya calificaste esta receta")
         }
     }
 
     private fun validardatos(): Boolean {
         var bandera = false
         if(puntuacion<0){
-            Toast.makeText(this@CalificarRecetaActivity, "Por favor elije una puntuación", Toast.LENGTH_SHORT).show()
+            ToastHelper.showWarning(this, "Por favor elige una puntuación")
         }else{
             if(binding.tiComentario.text.toString().isEmpty()){
                 binding.tiComentario.setError("Llena este campo.")
+                ToastHelper.vibrate(this)
             }else{
                 bandera = true
             }

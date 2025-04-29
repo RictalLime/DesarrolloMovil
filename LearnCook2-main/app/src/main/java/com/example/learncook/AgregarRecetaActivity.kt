@@ -12,6 +12,7 @@ import com.example.learncook.databinding.ActivityAgregarRecetaBinding
 import com.example.learncook.modelo.LearnCookDB
 import com.example.learncook.poko.Ingrediente
 import com.example.learncook.poko.Receta
+import com.example.learncook.utilidades.ToastHelper
 
 class AgregarRecetaActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAgregarRecetaBinding
@@ -57,6 +58,7 @@ class AgregarRecetaActivity : AppCompatActivity() {
         }
 
         binding.btnAgregarReceta.setOnClickListener {
+            ToastHelper.vibrate(this)
             if (validarDatos()) {
                 val receta = Receta(
                     0,
@@ -71,10 +73,10 @@ class AgregarRecetaActivity : AppCompatActivity() {
                     val ultimoId = modelo.traerUltimoIdDeReceta()
                     val agregadoIngredientes = modelo.agregarIngredientes(ultimoId, listaId, listaCantidad)
                     if (agregadoIngredientes == 1) {
-                        Toast.makeText(this@AgregarRecetaActivity, "Receta creada", Toast.LENGTH_SHORT).show()
+                        ToastHelper.showSuccess(this, "Receta creada exitosamente")
                         finish()
                     } else {
-                        Toast.makeText(this@AgregarRecetaActivity, "Error al agregar los ingredientes", Toast.LENGTH_SHORT).show()
+                        ToastHelper.showError(this, "Error al agregar los ingredientes")
                     }
                 }
             }
@@ -100,8 +102,9 @@ class AgregarRecetaActivity : AppCompatActivity() {
                 listaId.add(ingrediente.id)
 
                 binding.spIngredientesReceta.setSelection(0)
+                ToastHelper.vibrate(this)
             } else {
-                Toast.makeText(this, "Cantidad inválida", Toast.LENGTH_SHORT).show()
+                ToastHelper.showWarning(this, "Cantidad inválida", withVibration = true)
             }
         }
         builder.setNegativeButton("Cancelar") { dialog, which -> dialog.cancel() }
@@ -116,7 +119,7 @@ class AgregarRecetaActivity : AppCompatActivity() {
             binding.etIngredientes.text.isEmpty()
         ) {
             bandera = false
-            Toast.makeText(this@AgregarRecetaActivity, "Por favor llena todos los campos", Toast.LENGTH_SHORT).show()
+            ToastHelper.showWarning(this, "Por favor llena todos los campos", withVibration = true)
         }
         return bandera
     }

@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.learncook.databinding.ActivityLoginBinding
 import com.example.learncook.modelo.LearnCookDB
 import com.example.learncook.poko.Usuario
+import com.example.learncook.utilidades.ToastHelper
 
 
 class LoginActivity : AppCompatActivity() {
@@ -22,24 +23,27 @@ class LoginActivity : AppCompatActivity() {
         setContentView(view)
         modelo = LearnCookDB(this@LoginActivity)
         binding.btnIngreso.setOnClickListener {
+            ToastHelper.vibrate(this)
             val correo = binding.etCorreo.text.toString()
             val contrasena = binding.etContrasena.text.toString()
             if (validarCampos(correo, contrasena)) {
                 var usuario = Usuario(-1, correo, contrasena, "")
                 if (modelo.usuarioRegistrado(usuario)) {
                     usuario = modelo.traerUsuario(usuario)!!
-                    Toast.makeText(this@LoginActivity, "Bienvenido " + usuario.nombreUsuario, Toast.LENGTH_SHORT).show()
+                    ToastHelper.showSuccess(this, "Bienvenido ${usuario.nombreUsuario}")
                     irPantallaHome(usuario.id)
                 } else {
-                    Toast.makeText(this@LoginActivity, "Usuario o Contraseña Incorrecto", Toast.LENGTH_LONG).show()
+                    ToastHelper.showError(this, "Usuario o contraseña incorrectos")
                 }
             }
         }
         binding.twRecuperarContrasena.setOnClickListener {
+            ToastHelper.vibrate(this)
             val intent = Intent(this,RecuperarContrasenaActivity::class.java)
             startActivity(intent)
         }
         binding.btnRegistrarse.setOnClickListener {
+            ToastHelper.vibrate(this)
             val intent = Intent(this,RegistroActivity::class.java)
             startActivity(intent)
         }

@@ -18,6 +18,7 @@ import com.example.learncook.interfaces.ListenerRecycleReceta
 import com.example.learncook.modelo.LearnCookDB
 import com.example.learncook.poko.Ingrediente
 import com.example.learncook.poko.RecetaDatos
+import com.example.learncook.utilidades.ToastHelper
 
 class BuscarIngredienteActivity : AppCompatActivity(), ListenerRecycleReceta {
     private lateinit var binding: ActivityBuscarIngredienteBinding
@@ -61,16 +62,18 @@ class BuscarIngredienteActivity : AppCompatActivity(), ListenerRecycleReceta {
         }
 
         binding.btnAgregar.setOnClickListener {
+            ToastHelper.vibrate(this)
             agregarIngrediente(ingredienteSeleccionado)
         }
 
         binding.btnBuscar.setOnClickListener {
+            ToastHelper.vibrate(this)
             configuracionRecycle()
             val ingredientesSeleccionados = obtenerIngredientesSeleccionados()
             if (ingredientesSeleccionados.isNotEmpty()) {
                 buscarRecetasPorIngredientes()
             } else {
-                Toast.makeText(this, "Agregue al menos un ingrediente", Toast.LENGTH_SHORT).show()
+                ToastHelper.showWarning(this, "Agregue al menos un ingrediente", withVibration = true)
             }
         }
     }
@@ -87,7 +90,7 @@ class BuscarIngredienteActivity : AppCompatActivity(), ListenerRecycleReceta {
         binding.tblIngredientes.addView(nuevaFila)
         idIngrediente.add(ingrediente.id)
 
-        Toast.makeText(this, "Ingrediente agregado: ${ingrediente.nombre}", Toast.LENGTH_SHORT).show()
+        ToastHelper.showSuccess(this, "Ingrediente agregado: ${ingrediente.nombre}")
     }
 
     private fun obtenerIngredientesSeleccionados(): List<String> {
@@ -120,7 +123,7 @@ class BuscarIngredienteActivity : AppCompatActivity(), ListenerRecycleReceta {
                 binding.recycleRecetas.adapter = recetaAdapter
                 recetaAdapter.notifyDataSetChanged()
             }else {
-                Toast.makeText(this, "No se encontraron recetas con los ingredientes seleccionados", Toast.LENGTH_SHORT).show()
+                ToastHelper.showInfo(this, "No se encontraron recetas con los ingredientes seleccionados")
             }
         }
     }
@@ -128,14 +131,17 @@ class BuscarIngredienteActivity : AppCompatActivity(), ListenerRecycleReceta {
 
 
     override fun clicEditarReceta(receta: RecetaDatos, position: Int) {
-        Toast.makeText(this, "no puedes hacer esto con esta receta", Toast.LENGTH_SHORT).show()
+        ToastHelper.vibrate(this)
+        ToastHelper.showInfo(this, "no puedes hacer esto con esta receta")
     }
 
     override fun clicEliminarReceta(receta: RecetaDatos, position: Int) {
-        Toast.makeText(this, "no puedes hacer esto con esta receta", Toast.LENGTH_SHORT).show()
+        ToastHelper.vibrate(this)
+        ToastHelper.showInfo(this, "no puedes hacer esto con esta receta")
     }
 
     override fun clicCalificarReceta(receta: RecetaDatos, position: Int) {
+        ToastHelper.vibrate(this)
         val intent = Intent(this@BuscarIngredienteActivity, CalificarRecetaActivity::class.java)
         intent.putExtra("idUsuario",idUsuario)
         intent.putExtra("idReceta",receta.idReceta)
@@ -144,6 +150,7 @@ class BuscarIngredienteActivity : AppCompatActivity(), ListenerRecycleReceta {
     }
 
     override fun clicCompartirReceta(receta: RecetaDatos, position: Int) {
+        ToastHelper.vibrate(this)
         val mensaje = "Receta: ${receta.nombreReceta}\n" +
                 "Elaborada por: ${receta.nombreUsuario}\n" +
                 "Ingredientes: ${receta.ingredientes.toString()}\n" +
@@ -155,6 +162,7 @@ class BuscarIngredienteActivity : AppCompatActivity(), ListenerRecycleReceta {
         intent.type = "text/plain"
         intent.putExtra(Intent.EXTRA_TEXT, mensaje)
         startActivity(Intent.createChooser(intent, "Compartir Receta!"))
+        ToastHelper.showSuccess(this, "Receta compartida")
     }
     private fun configuracionRecycle(){
         binding.recycleRecetas.layoutManager = LinearLayoutManager(this)
